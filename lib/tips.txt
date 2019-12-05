@@ -1,0 +1,66 @@
+filtrar pelo user id
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:projetoflutterv4/models/user_model.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+class HomeTab extends StatelessWidget {
+  final user =
+      ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+    return Text(model.firebaseUser.uid);
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: Scaffold(
+          body: StreamBuilder(
+        stream: Firestore.instance
+            .collection('orders')
+            .where('clientId', isEqualTo: user)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData)
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          return Center(
+            child: Text(snapshot.data.documents.length.toString()),
+          );
+        },
+      )),
+    );
+  }
+}
+
+like button animado
+LikeButton(
+                                size: 25,
+                                circleColor: CircleColor(
+                                    start: Color(0xff00ddff),
+                                    end: Color(0xff0099cc)),
+                                bubblesColor: BubblesColor(
+                                  dotPrimaryColor: Color(0xff33b5e5),
+                                  dotSecondaryColor: Color(0xff0099cc),
+                                ),
+                                likeBuilder: (bool isLiked) {
+                                  return Icon(
+                                    Icons.favorite,
+                                    color: isLiked ? Colors.red : Colors.grey,
+                                    size: 25,
+                                  );
+                                },
+                                likeCount: snapshot["likes"],
+                                countBuilder:
+                                    (int count, bool isLiked, String text) {
+                                  var color = isLiked
+                                      ? Colors.deepPurpleAccent
+                                      : Colors.grey;
+                                  Widget result;
+                                  result = Text(
+                                    text,
+                                    style: TextStyle(color: color),
+                                  );
+                                  return result;
+                                },
+                              ),

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "559174482806",
+    "firebase_url": "https://bdralifla.firebaseio.com",
+    "project_id": "bdralifla",
+    "storage_bucket": "bdralifla.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559174482806:android:efdf9862605cf7c0495857",
+        "android_client_info": {
+          "package_name": "alexandrechoske.projetoflutterv4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559174482806-8mri0l5tiisf4d3lkol5k6ie70bbifj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "alexandrechoske.projetoflutterv4",
+            "certificate_hash": "4e734e8b1f9c00b28316220f139a455058978c4d"
+          }
+        },
+        {
+          "client_id": "559174482806-1f6m7vfof4mfsvhg3tk225r2auhbe7sa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5Zm3IrpDeA0uqW4L9ptJMIdoog2I7wxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559174482806-1f6m7vfof4mfsvhg3tk225r2auhbe7sa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
