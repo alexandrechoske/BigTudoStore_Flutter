@@ -6,7 +6,7 @@ class PlacesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
-      future: Firestore.instance.collection("places").getDocuments(),
+      future: Firestore.instance.collection("lojas").getDocuments(),
       builder: (context, snapshot){
         if(!snapshot.hasData)
           return Center(

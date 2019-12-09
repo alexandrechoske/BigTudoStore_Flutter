@@ -64,3 +64,25 @@ LikeButton(
                                   return result;
                                 },
                               ),
+
+
+add e delete fifebase
+{
+                                Firestore.instance
+                                    .collection("likes")
+                                    .document(widget.ref.toString())
+                                    .collection(userLogged)
+                                    .add({
+                                  "prodId": widget.ref,
+                                  "folheado": widget.folheado,
+                                  "user": true,
+                                  "categoria": widget.categoria
+                                });
+                              },
+
+async {
+                                await Firestore.instance
+                                    .collection("likes")
+                                    .document(widget.ref.toString())
+                                    .delete();
+                              },

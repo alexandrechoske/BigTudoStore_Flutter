@@ -51,7 +51,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   bool checkItemCart = false;
-  bool checkFavorite = true;
+  bool checkFavorite = false;
   double buttonSize = 20;
   double buttonPadding = 10;
 
@@ -63,15 +63,13 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void fCheckFavorite() {
     setState(() {
-      checkFavorite = checkFavorite;
+      checkFavorite = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     String userLogged = UserModel.of(context).firebaseUser.uid;
-
-    final likedItem = Firestore.instance.collection('likes').getDocuments();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -126,25 +124,65 @@ class _ProductScreenState extends State<ProductScreen> {
                     fillColor: Colors.white,
                     padding: EdgeInsets.all(buttonPadding),
                   ),
-                  RawMaterialButton(
-                    onPressed: () => fCheckFavorite,
-                    child: new IconButton(
-                        icon: Icon(Icons.favorite),
-                        onPressed: () {
-                          Firestore.instance.collection("likes").add({
-                            "prodId": widget.ref,
-                            "folheado": widget.folheado,
-                            "user": userLogged,
-                            "categoria": widget.categoria
-                          });
-                        },
-                        iconSize: buttonSize,
-                        color: Colors.black ),
-                    shape: new CircleBorder(),
-                    elevation: 2.0,
-                    fillColor: Colors.white,
-                    padding: EdgeInsets.all(buttonPadding),
-                  ),
+                  StreamBuilder(
+                      stream: Firestore.instance
+                          .collection("likes")
+                          .document(widget.ref)
+                          .collection(userLogged)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData)
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        return Column(
+                          children: <Widget>[
+                            Text(widget.ref),
+                            Text(snapshot.data.documents.length.toString()),
+                            RawMaterialButton(
+                              onPressed: () {
+                                Firestore.instance
+                                    .collection("likes")
+                                    .document('_' + widget.ref.toString())
+                                    .collection(userLogged)
+                                    .add({
+                                  "prodId": widget.id,
+                                  "folheado": widget.folheado,
+                                  "user": true,
+                                  "categoria": widget.categoria
+                                });
+                              },
+                              child: Icon(Icons.plus_one,
+                                  size: buttonSize,
+                                  color: snapshot.data.documents.length == 0
+                                      ? Colors.black
+                                      : Colors.red),
+                              shape: new CircleBorder(),
+                              elevation: 2.0,
+                              fillColor: Colors.white,
+                              padding: EdgeInsets.all(buttonPadding),
+                            ),
+                            RawMaterialButton(
+                              onPressed: () async {
+                                await Firestore.instance
+                                    .collection("likes")
+                                    .document(widget.ref)
+                                    .delete();
+                              },
+                              child: Icon(Icons.indeterminate_check_box,
+                                  size: buttonSize,
+                                  color: snapshot.data.documents.length == 0
+                                      ? Colors.black
+                                      : Colors.red),
+                              shape: new CircleBorder(),
+                              elevation: 2.0,
+                              fillColor: Colors.white,
+                              padding: EdgeInsets.all(buttonPadding),
+                            ),
+                          ],
+                        );
+                      }),
                 ],
               ),
             ),
