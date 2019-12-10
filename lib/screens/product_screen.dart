@@ -70,6 +70,10 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     String userLogged = UserModel.of(context).firebaseUser.uid;
+    final CollectionReference ref = Firestore.instance
+        .collection("likes")
+        .document(widget.ref.toString())
+        .collection(widget.id);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -125,28 +129,21 @@ class _ProductScreenState extends State<ProductScreen> {
                     padding: EdgeInsets.all(buttonPadding),
                   ),
                   StreamBuilder(
-                      stream: Firestore.instance
-                          .collection("likes")
-                          .document(widget.ref)
-                          .collection(userLogged)
-                          .snapshots(),
+                      stream: ref.snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData)
                           return Center(
                             child: CircularProgressIndicator(),
                           );
+
                         return Column(
                           children: <Widget>[
                             Text(widget.ref),
                             Text(snapshot.data.documents.length.toString()),
                             RawMaterialButton(
-                              onPressed: () {
-                                Firestore.instance
-                                    .collection("likes")
-                                    .document('_' + widget.ref.toString())
-                                    .collection(userLogged)
-                                    .add({
+                              onPressed: () async {
+                                await ref.document(userLogged).setData({
                                   "prodId": widget.id,
                                   "folheado": widget.folheado,
                                   "user": true,
@@ -165,12 +162,9 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
                             RawMaterialButton(
                               onPressed: () async {
-                                await Firestore.instance
-                                    .collection("likes")
-                                    .document(widget.ref)
-                                    .delete();
+                                await ref.document(userLogged).delete();
                               },
-                              child: Icon(Icons.indeterminate_check_box,
+                              child: Icon(Icons.remove,
                                   size: buttonSize,
                                   color: snapshot.data.documents.length == 0
                                       ? Colors.black
