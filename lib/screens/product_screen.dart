@@ -70,6 +70,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     String userLogged = UserModel.of(context).firebaseUser.uid;
+<<<<<<< HEAD
     final CollectionReference refFav = Firestore.instance
         .collection("favorites")
         .document(widget.ref.toString())
@@ -79,6 +80,12 @@ class _ProductScreenState extends State<ProductScreen> {
         .collection("likes")
         .document('products')
         .collection(widget.ref.toString());
+=======
+    final CollectionReference ref = Firestore.instance
+        .collection("likes")
+        .document(widget.ref.toString())
+        .collection(widget.id);
+>>>>>>> 9898209f6ff7685094acf6050ebca48c3ebaa79c
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -134,16 +141,22 @@ class _ProductScreenState extends State<ProductScreen> {
                     padding: EdgeInsets.all(buttonPadding),
                   ),
                   StreamBuilder(
+<<<<<<< HEAD
                       stream: refFav.snapshots(),
+=======
+                      stream: ref.snapshots(),
+>>>>>>> 9898209f6ff7685094acf6050ebca48c3ebaa79c
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData)
                           return Center(
                             child: CircularProgressIndicator(),
                           );
+
                         return Column(
                           children: <Widget>[
                             RawMaterialButton(
+<<<<<<< HEAD
                               onPressed: snapshot.data.documents.length == 0
                                   ? () async {
                                       await refFav
@@ -161,6 +174,31 @@ class _ProductScreenState extends State<ProductScreen> {
                                           .delete();
                                     },
                               child: Icon(Icons.favorite,
+=======
+                              onPressed: () async {
+                                await ref.document(userLogged).setData({
+                                  "prodId": widget.id,
+                                  "folheado": widget.folheado,
+                                  "user": true,
+                                  "categoria": widget.categoria
+                                });
+                              },
+                              child: Icon(Icons.plus_one,
+                                  size: buttonSize,
+                                  color: snapshot.data.documents.length == 0
+                                      ? Colors.black
+                                      : Colors.red),
+                              shape: new CircleBorder(),
+                              elevation: 2.0,
+                              fillColor: Colors.white,
+                              padding: EdgeInsets.all(buttonPadding),
+                            ),
+                            RawMaterialButton(
+                              onPressed: () async {
+                                await ref.document(userLogged).delete();
+                              },
+                              child: Icon(Icons.remove,
+>>>>>>> 9898209f6ff7685094acf6050ebca48c3ebaa79c
                                   size: buttonSize,
                                   color: snapshot.data.documents.length == 0
                                       ? Colors.black
