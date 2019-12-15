@@ -70,6 +70,15 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     String userLogged = UserModel.of(context).firebaseUser.uid;
+    final CollectionReference refFav = Firestore.instance
+        .collection("favorites")
+        .document(widget.ref.toString())
+        .collection(userLogged);
+
+    final CollectionReference refLikes = Firestore.instance
+        .collection("likes")
+        .document('products')
+        .collection(widget.ref.toString());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -82,7 +91,7 @@ class _ProductScreenState extends State<ProductScreen> {
           Padding(
             padding: EdgeInsets.all(10),
             child: SizedBox(
-                height: 350,
+                height: 300,
                 width: 100,
                 child: FadeInImage.assetNetwork(
                   placeholder: 'assets/gifs/spinner2.gif',
@@ -90,7 +99,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 )),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 25, right: 25),
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -125,11 +134,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     padding: EdgeInsets.all(buttonPadding),
                   ),
                   StreamBuilder(
-                      stream: Firestore.instance
-                          .collection("likes")
-                          .document(widget.ref)
-                          .collection(userLogged)
-                          .snapshots(),
+                      stream: refFav.snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData)
@@ -138,22 +143,24 @@ class _ProductScreenState extends State<ProductScreen> {
                           );
                         return Column(
                           children: <Widget>[
-                            Text(widget.ref),
-                            Text(snapshot.data.documents.length.toString()),
                             RawMaterialButton(
-                              onPressed: () {
-                                Firestore.instance
-                                    .collection("likes")
-                                    .document('_' + widget.ref.toString())
-                                    .collection(userLogged)
-                                    .add({
-                                  "prodId": widget.id,
-                                  "folheado": widget.folheado,
-                                  "user": true,
-                                  "categoria": widget.categoria
-                                });
-                              },
-                              child: Icon(Icons.plus_one,
+                              onPressed: snapshot.data.documents.length == 0
+                                  ? () async {
+                                      await refFav
+                                          .document(userLogged)
+                                          .setData({
+                                        "prodId": widget.id,
+                                        "folheado": widget.folheado,
+                                        "user": userLogged,
+                                        "categoria": widget.categoria
+                                      });
+                                    }
+                                  : () async {
+                                      await refFav
+                                          .document(userLogged)
+                                          .delete();
+                                    },
+                              child: Icon(Icons.favorite,
                                   size: buttonSize,
                                   color: snapshot.data.documents.length == 0
                                       ? Colors.black
@@ -163,23 +170,41 @@ class _ProductScreenState extends State<ProductScreen> {
                               fillColor: Colors.white,
                               padding: EdgeInsets.all(buttonPadding),
                             ),
-                            RawMaterialButton(
-                              onPressed: () async {
-                                await Firestore.instance
-                                    .collection("likes")
-                                    .document(widget.ref)
-                                    .delete();
-                              },
-                              child: Icon(Icons.indeterminate_check_box,
-                                  size: buttonSize,
-                                  color: snapshot.data.documents.length == 0
-                                      ? Colors.black
-                                      : Colors.red),
-                              shape: new CircleBorder(),
-                              elevation: 2.0,
-                              fillColor: Colors.white,
-                              padding: EdgeInsets.all(buttonPadding),
-                            ),
+                          ],
+                        );
+                      }),
+                  StreamBuilder(
+                      stream: refLikes.snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData)
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        return Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                RawMaterialButton(
+                                  onPressed: () => {
+                                    refLikes.document(userLogged).setData({
+                                      "prodId": widget.id,
+                                      "folheado": widget.folheado,
+                                      "user": userLogged,
+                                      "categoria": widget.categoria
+                                    })
+                                  },
+                                  child: Icon(Icons.thumb_up,
+                                      size: buttonSize, color: Colors.blue),
+                                  shape: new CircleBorder(),
+                                  elevation: 2.0,
+                                  fillColor: Colors.white,
+                                  padding: EdgeInsets.all(buttonPadding),
+                                ),
+                                Text(snapshot.data.documents.length.toString()),
+                              ],
+                            )
                           ],
                         );
                       }),
@@ -348,10 +373,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                       Text('Zircônia'),
                                       Icon(
                                           widget.especialZirc == "S"
-                                              ? Icons.star
+                                              ? Icons.check
                                               : null,
                                           color: widget.especialZirc == "S"
-                                              ? Colors.blueGrey
+                                              ? Colors.green
                                               : Colors.black),
                                     ],
                                   ),

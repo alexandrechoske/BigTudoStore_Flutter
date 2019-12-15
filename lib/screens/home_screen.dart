@@ -35,14 +35,6 @@ class HomeScreen extends StatelessWidget {
         ),
         Scaffold(
           appBar: AppBar(
-            title: Text("Sobre Big Tudo"),
-            centerTitle: true,
-          ),
-          body: PlacesTab(),
-          drawer: CustomDrawer(_pageController),
-        ),
-        Scaffold(
-          appBar: AppBar(
             title: Text("Meus Pedidos"),
             centerTitle: true,
           ),
@@ -55,6 +47,22 @@ class HomeScreen extends StatelessWidget {
             centerTitle: true,
           ),
           body: CartScreen(),
+          drawer: CustomDrawer(_pageController),
+        ),
+        Scaffold(
+          appBar: AppBar(
+            title: Text("Favoritos0"),
+            centerTitle: true,
+          ),
+          body: PlacesTab(),
+          drawer: CustomDrawer(_pageController),
+        ),
+        Scaffold(
+          appBar: AppBar(
+            title: Text("Sobre Big Tudo"),
+            centerTitle: true,
+          ),
+          body: PlacesTab(),
           drawer: CustomDrawer(_pageController),
         ),
       ],

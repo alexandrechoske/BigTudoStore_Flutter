@@ -19,7 +19,6 @@ class CustomDrawer extends StatelessWidget {
               colors: [
                 Color.fromARGB(255, 203, 236, 241),
                 Colors.white
-                //TODO: colocar o gradient na splash screen
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter
@@ -92,9 +91,11 @@ class CustomDrawer extends StatelessWidget {
               Divider(),
               DrawerTile(Icons.home, "Início", pageController, 0),
               DrawerTile(Icons.list, "Produtos", pageController, 1),
-              DrawerTile(Icons.location_on, "Lojas", pageController, 2),
               DrawerTile(Icons.playlist_add_check, "Meus Pedidos", pageController, 3),
               DrawerTile(Icons.shopping_cart, "Carrinho", pageController, 4),
+              DrawerTile(Icons.favorite, "Favoritos", pageController, 5),
+              DrawerTile(Icons.info, "Sobre", pageController, 2),
+
 
             ],
           )

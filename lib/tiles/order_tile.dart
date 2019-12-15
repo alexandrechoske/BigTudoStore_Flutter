@@ -35,7 +35,7 @@ class OrderTile extends StatelessWidget {
                       ),
                       SizedBox(height: 4.0,),
 //                      Text(
-//                        _buildProductsText(snapshot.data)
+//                          _buildProductsText(snapshot.data)
 //                      ),
                       SizedBox(height: 4.0,),
                       Text(
