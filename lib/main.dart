@@ -1,5 +1,4 @@
  import 'package:flutter/material.dart';
-import 'package:projetoflutterv4/screens/home_screen.dart';
 import 'package:projetoflutterv4/screens/splash_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
             return ScopedModel<CartModel>(
               model: CartModel(model),
               child: MaterialApp(
-                  title: "Flutter's Clothing",
+                  title: "Big Tudo Store",
                   theme: ThemeData(
                       primarySwatch: Colors.blue,
                       primaryColor: Color.fromARGB(255, 4, 125, 141)

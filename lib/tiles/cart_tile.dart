@@ -19,9 +19,9 @@ class CartTile extends StatelessWidget {
         children: <Widget>[
           Container(
               padding: EdgeInsets.all(8.0),
-              width: 120.0,
+              width: 90.0,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(50),
                 child: Image.network(
                   cartProduct.imag,
                   fit: BoxFit.cover,
@@ -49,23 +49,23 @@ class CartTile extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        color: Theme.of(context).primaryColor,
-                        onPressed: cartProduct.quantity > 1
-                            ? () {
-                                CartModel.of(context).decProduct(cartProduct);
-                              }
-                            : null,
-                      ),
+//                      IconButton(
+//                        icon: Icon(Icons.remove),
+//                        color: Theme.of(context).primaryColor,
+//                        onPressed: cartProduct.quantity > 1
+//                            ? () {
+//                                CartModel.of(context).decProduct(cartProduct);
+//                              }
+//                            : null,
+//                      ),
                       Text(cartProduct.quantity.toString()),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        color: Theme.of(context).primaryColor,
-                        onPressed: () {
-                          CartModel.of(context).incProduct(cartProduct);
-                        },
-                      ),
+//                      IconButton(
+//                        icon: Icon(Icons.add),
+//                        color: Theme.of(context).primaryColor,
+//                        onPressed: () {
+//                          CartModel.of(context).incProduct(cartProduct);
+//                        },
+//                      ),
                       FlatButton(
                         child: Text("Remover"),
                         textColor: Colors.grey[500],

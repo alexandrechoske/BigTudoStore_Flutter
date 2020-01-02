@@ -11,7 +11,7 @@ class CartProduct {
   String pid;
   int quantity;
   double valorAte;
-  String size;
+  DateTime date;
 
   CartProduct();
 
@@ -25,6 +25,7 @@ class CartProduct {
     valorAte = document.data["valorAte"];
     descr = document.data["descr"];
     imag = document.data["imag"];
+    date = DateTime.now();
   }
 
   get productData => null;
@@ -39,6 +40,7 @@ class CartProduct {
       "valorAte": valorAte,
       "descr": descr,
       "imag": imag,
+      "date": date,
     };
   }
 

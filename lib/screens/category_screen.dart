@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'package:projetoflutterv4/screens/product_screen.dart';
 
 class ProductList extends StatefulWidget {
@@ -33,6 +32,8 @@ class _ProductList extends State<ProductList> {
         .orderBy('valorAte', descending: true)
         .snapshots();
 
+    Color filterColor = Colors.cyan;
+
     return new Container(
       child: Scaffold(
         body: StreamBuilder(
@@ -47,7 +48,7 @@ class _ProductList extends State<ProductList> {
               crossAxisCount: 2,
               children: snapshot.data.documents.map((snapshot) {
                 return new Card(
-                  elevation: 10.0,
+                  elevation: 5,
                   child: InkWell(
                     child: Column(
                       children: <Widget>[
@@ -154,7 +155,7 @@ class _ProductList extends State<ProductList> {
                       Container(
                           height: 65,
                           color: isAdultoSelected
-                              ? Colors.greenAccent
+                              ? filterColor
                               : Colors.transparent,
                           child: Column(
                             children: <Widget>[
@@ -175,7 +176,7 @@ class _ProductList extends State<ProductList> {
                       Container(
                         height: 65,
                         color: isInfantilSelected
-                            ? Colors.greenAccent
+                            ? filterColor
                             : Colors.transparent,
                         child: Column(
                           children: <Widget>[
@@ -205,7 +206,7 @@ class _ProductList extends State<ProductList> {
                       Container(
                           height: 65,
                           color: isPrataSelected
-                              ? Colors.greenAccent
+                              ? filterColor
                               : Colors.transparent,
                           child: Column(
                             children: <Widget>[
@@ -226,7 +227,7 @@ class _ProductList extends State<ProductList> {
                       Container(
                           height: 65,
                           color: isOuroSelected
-                              ? Colors.greenAccent
+                              ? filterColor
                               : Colors.transparent,
                           child: Column(
                             children: <Widget>[
@@ -247,7 +248,7 @@ class _ProductList extends State<ProductList> {
                       Container(
                           height: 65,
                           color: isCouroSelected
-                              ? Colors.greenAccent
+                              ? filterColor
                               : Colors.transparent,
                           child: Column(
                             children: <Widget>[

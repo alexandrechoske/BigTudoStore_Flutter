@@ -6,7 +6,6 @@ import 'package:projetoflutterv4/widgets/cart_price.dart';
 import 'package:projetoflutterv4/widgets/discount_card.dart';
 import 'package:projetoflutterv4/widgets/ship_card.dart';
 import 'package:scoped_model/scoped_model.dart';
-
 import 'login_screen.dart';
 import 'order_screen.dart';
 
@@ -15,7 +14,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Meu Carrinho"),
+        title: Text("RESUMO"),
         actions: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 8.0),

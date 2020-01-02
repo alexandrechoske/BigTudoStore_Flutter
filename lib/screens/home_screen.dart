@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projetoflutterv4/datas/cart_product.dart';
 import 'package:projetoflutterv4/screens/category_screen.dart';
+import 'package:projetoflutterv4/screens/favorites_screen.dart';
 import 'package:projetoflutterv4/tabs/home_tab.dart';
 import 'package:projetoflutterv4/tabs/orders_tab.dart';
 import 'package:projetoflutterv4/tabs/places_tab.dart';
@@ -13,6 +14,8 @@ class HomeScreen extends StatelessWidget {
 
   final _pageController = PageController();
 
+  //TODO: aqui altera as navegações do drawer
+
   @override
   Widget build(BuildContext context) {
     return PageView(
@@ -20,9 +23,13 @@ class HomeScreen extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         Scaffold(
-          body: HomeTab(),
+          appBar: AppBar(
+            title: Text("Página Inicial"),
+            centerTitle: true,
+          ),
           drawer: CustomDrawer(_pageController),
-          floatingActionButton: CartButton(),
+          body: HomeTab(),
+//          floatingActionButton: CartButton(),
         ),
         Scaffold(
           appBar: AppBar(
@@ -31,7 +38,7 @@ class HomeScreen extends StatelessWidget {
           ),
           drawer: CustomDrawer(_pageController),
           body: ProductList(),
-          floatingActionButton: CartButton(),
+//          floatingActionButton: CartButton(),
         ),
         Scaffold(
           appBar: AppBar(
@@ -51,10 +58,10 @@ class HomeScreen extends StatelessWidget {
         ),
         Scaffold(
           appBar: AppBar(
-            title: Text("Favoritos0"),
+            title: Text("Favoritos"),
             centerTitle: true,
           ),
-          body: PlacesTab(),
+          body: FavoriteScreen(),
           drawer: CustomDrawer(_pageController),
         ),
         Scaffold(

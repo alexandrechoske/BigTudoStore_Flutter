@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projetoflutterv4/datas/cart_product.dart';
-import 'package:projetoflutterv4/datas/likes_products.dart';
 import 'package:projetoflutterv4/models/cart_model.dart';
-import 'package:projetoflutterv4/models/like_model.dart';
 import 'package:projetoflutterv4/models/user_model.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,6 +50,7 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   bool checkItemCart = false;
   bool checkFavorite = false;
+  String favAnimation = '';
   double buttonSize = 20;
   double buttonPadding = 10;
 
@@ -69,8 +68,10 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String userLogged = UserModel.of(context).firebaseUser.uid;
-<<<<<<< HEAD
+    String userLogged = (UserModel.of(context).isLoggedIn())
+        ? UserModel.of(context).firebaseUser.uid
+        : '';
+
     final CollectionReference refFav = Firestore.instance
         .collection("favorites")
         .document(widget.ref.toString())
@@ -80,12 +81,6 @@ class _ProductScreenState extends State<ProductScreen> {
         .collection("likes")
         .document('products')
         .collection(widget.ref.toString());
-=======
-    final CollectionReference ref = Firestore.instance
-        .collection("likes")
-        .document(widget.ref.toString())
-        .collection(widget.id);
->>>>>>> 9898209f6ff7685094acf6050ebca48c3ebaa79c
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -141,72 +136,48 @@ class _ProductScreenState extends State<ProductScreen> {
                     padding: EdgeInsets.all(buttonPadding),
                   ),
                   StreamBuilder(
-<<<<<<< HEAD
                       stream: refFav.snapshots(),
-=======
-                      stream: ref.snapshots(),
->>>>>>> 9898209f6ff7685094acf6050ebca48c3ebaa79c
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData)
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-
+                          return Container();
                         return Column(
                           children: <Widget>[
-                            RawMaterialButton(
-<<<<<<< HEAD
-                              onPressed: snapshot.data.documents.length == 0
-                                  ? () async {
-                                      await refFav
-                                          .document(userLogged)
-                                          .setData({
-                                        "prodId": widget.id,
-                                        "folheado": widget.folheado,
-                                        "user": userLogged,
-                                        "categoria": widget.categoria
-                                      });
-                                    }
-                                  : () async {
-                                      await refFav
-                                          .document(userLogged)
-                                          .delete();
-                                    },
-                              child: Icon(Icons.favorite,
-=======
-                              onPressed: () async {
-                                await ref.document(userLogged).setData({
-                                  "prodId": widget.id,
-                                  "folheado": widget.folheado,
-                                  "user": true,
-                                  "categoria": widget.categoria
-                                });
-                              },
-                              child: Icon(Icons.plus_one,
-                                  size: buttonSize,
-                                  color: snapshot.data.documents.length == 0
-                                      ? Colors.black
-                                      : Colors.red),
-                              shape: new CircleBorder(),
-                              elevation: 2.0,
-                              fillColor: Colors.white,
-                              padding: EdgeInsets.all(buttonPadding),
-                            ),
-                            RawMaterialButton(
-                              onPressed: () async {
-                                await ref.document(userLogged).delete();
-                              },
-                              child: Icon(Icons.remove,
->>>>>>> 9898209f6ff7685094acf6050ebca48c3ebaa79c
-                                  size: buttonSize,
-                                  color: snapshot.data.documents.length == 0
-                                      ? Colors.black
-                                      : Colors.red),
-                              shape: new CircleBorder(),
-                              elevation: 2.0,
-                              fillColor: Colors.white,
-                              padding: EdgeInsets.all(buttonPadding),
+                            Opacity(
+                              opacity: (UserModel.of(context).isLoggedIn())
+                                  ? 1.0
+                                  : 0.0,
+                              child: RawMaterialButton(
+                                onPressed: snapshot.data.documents.length == 0
+                                    ? () async {
+                                        await refFav
+                                            .document(userLogged)
+                                            .setData({
+                                          "prodId": widget.id,
+                                          "folheado": widget.folheado,
+                                          "user": userLogged,
+                                          "categoria": widget.categoria,
+                                          "registro": DateTime.now(),
+                                        });
+                                      }
+                                    : () async {
+                                        await refFav
+                                            .document(userLogged)
+                                            .delete();
+                                      },
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Icon(Icons.favorite,
+                                      size: buttonSize,
+                                      color: snapshot.data.documents.length == 0
+                                          ? Colors.black
+                                          : Colors.red),
+                                ),
+                                shape: CircleBorder(),
+                                elevation: 2.0,
+                                fillColor: Colors.white,
+                              ),
                             ),
                           ],
                         );
@@ -224,23 +195,41 @@ class _ProductScreenState extends State<ProductScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                RawMaterialButton(
-                                  onPressed: () => {
-                                    refLikes.document(userLogged).setData({
-                                      "prodId": widget.id,
-                                      "folheado": widget.folheado,
-                                      "user": userLogged,
-                                      "categoria": widget.categoria
-                                    })
-                                  },
-                                  child: Icon(Icons.thumb_up,
-                                      size: buttonSize, color: Colors.blue),
-                                  shape: new CircleBorder(),
-                                  elevation: 2.0,
-                                  fillColor: Colors.white,
-                                  padding: EdgeInsets.all(buttonPadding),
+                                Opacity(
+                                  opacity: (UserModel.of(context).isLoggedIn())
+                                      ? 1.0
+                                      : 0.0,
+                                  child: RawMaterialButton(
+                                    onPressed:
+                                        snapshot.data.documents.length == 0
+                                            ? () async {
+                                                await refLikes
+                                                    .document(userLogged)
+                                                    .setData({
+                                                  "prodId": widget.id,
+                                                  "folheado": widget.folheado,
+                                                  "user": userLogged,
+                                                  "categoria": widget.categoria,
+                                                  "registro": DateTime.now(),
+                                                });
+                                              }
+                                            : () async {
+                                                await refLikes
+                                                    .document(userLogged)
+                                                    .delete();
+                                              },
+                                    child: Icon(Icons.thumb_up,
+                                        size: buttonSize,
+                                        color:
+                                            snapshot.data.documents.length == 0
+                                                ? Colors.black
+                                                : Colors.blue),
+                                    shape: new CircleBorder(),
+                                    elevation: 2.0,
+                                    fillColor: Colors.white,
+                                    padding: EdgeInsets.all(buttonPadding),
+                                  ),
                                 ),
-                                Text(snapshot.data.documents.length.toString()),
                               ],
                             )
                           ],
@@ -284,58 +273,68 @@ class _ProductScreenState extends State<ProductScreen> {
                       fontStyle: FontStyle.italic,
                       color: Colors.black),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    FlatButton.icon(
-                      color: Colors.blue,
-                      icon: Icon(
-                        Icons.add_shopping_cart,
-                        color: Colors.white,
-                      ),
-                      //`Icon` to display
-                      label: Text(
-                        'Adicionar ao Carrinho',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                Opacity(
+                  opacity: (UserModel.of(context).isLoggedIn()) ||
+                          widget.estoque == "S"
+                      ? 1.0
+                      : 0.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FlatButton.icon(
+                        color: Colors.blue,
+                        icon: Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.white,
+                        ),
+                        //`Icon` to display
+                        label: Text(
+                          UserModel.of(context).isLoggedIn()
+                              ? "Adicionar ao Carrinho"
+                              : "Entre para Comprar",
+                          style: TextStyle(color: Colors.white),
+                        ),
 
-                      //`Text` to display
-                      onPressed: () {
-                        if (UserModel.of(context).isLoggedIn()) {
-                          fCheckCart();
-                          CartProduct cartProduct = CartProduct();
-                          cartProduct.quantity = 1;
-                          cartProduct.pid = widget.ref;
-                          cartProduct.category = widget.categoria;
-                          cartProduct.classe = widget.classe;
-                          cartProduct.folheado = widget.folheado;
-                          cartProduct.valorAte = widget.valorAte;
-                          cartProduct.descr = widget.descr;
-                          cartProduct.imag = widget.imag;
+                        //`Text` to display
+                        onPressed: () {
+                          if (UserModel.of(context).isLoggedIn()) {
+                            fCheckCart();
+                            CartProduct cartProduct = CartProduct();
+                            cartProduct.quantity = 1;
+                            cartProduct.pid = widget.ref;
+                            cartProduct.category = widget.categoria;
+                            cartProduct.classe = widget.classe;
+                            cartProduct.folheado = widget.folheado;
+                            cartProduct.valorAte = widget.valorAte;
+                            cartProduct.descr = widget.descr;
+                            cartProduct.imag = widget.imag;
 
-                          CartModel.of(context).addCartItem(cartProduct);
-                        } else {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => LoginScreen()));
-                        }
-                      },
-                    ),
-                    Opacity(
-                      opacity: checkItemCart ? 1.0 : 0.0,
-                      child: Text(checkItemCart ? 'Item Adicionado' : ''),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 0),
-                      child: Opacity(
-                        opacity: checkItemCart ? 1.0 : 0.0,
-                        child: SizedBox(
-                          height: 60,
-                          width: 60,
-                          child: Image.asset('assets/gifs/checkmarkgif.gif'),
+                            CartModel.of(context).addCartItem(cartProduct);
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
+                          }
+                        },
+                      ),
+                      Container(
+                        child: Opacity(
+                          opacity: checkItemCart ? 1.0 : 0.0,
+                          child: Text(checkItemCart ? 'Item Adicionado!' : ''),
                         ),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: EdgeInsets.only(right: 0),
+                        child: Opacity(
+                          opacity: checkItemCart ? 1.0 : 0.0,
+                          child: SizedBox(
+                            height: 60,
+                            width: 60,
+                            child: Image.asset('assets/gifs/checkmarkgif.gif'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10),
@@ -432,7 +431,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                           widget.estoque == "S"
                                               ? Icons.check
                                               : Icons.fiber_manual_record,
-                                          color: widget.especialZirc == "S"
+                                          color: widget.estoque == "S"
                                               ? Colors.green
                                               : Colors.red),
                                     ],

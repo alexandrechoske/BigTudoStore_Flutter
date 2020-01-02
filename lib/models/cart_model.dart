@@ -87,7 +87,7 @@ class CartModel extends Model {
   }
 
   double getShipPrice(){
-    return 5;
+    return 10;
   }
 
   Future<String> finishOrder() async {
@@ -108,7 +108,8 @@ class CartModel extends Model {
           "productsPrice": productsPrice,
           "discount": discount,
           "totalPrice": productsPrice - discount + shipPrice,
-          "status": 1
+          "status": 1,
+          "date": DateTime.now().toLocal(),
         }
     );
 

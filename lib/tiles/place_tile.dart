@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:projetoflutterv4/screens/feedback_form.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -51,15 +52,23 @@ class PlaceTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  RawMaterialButton(
-                    onPressed: () {
-                      launch("tel:${snapshot.data["phone"]}");
-                    },
-                    child: Icon(Icons.phone, size: 25, color: Colors.black),
-                    shape: new CircleBorder(),
-                    elevation: 2.0,
-                    fillColor: Colors.white,
-                    padding: EdgeInsets.all(15),
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: RawMaterialButton(
+                          onPressed: () {
+                            launch("tel:${snapshot.data["phone"]}");
+                          },
+                          child:
+                              Icon(Icons.phone, size: 25, color: Colors.black),
+                          shape: new CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: Colors.white,
+                          padding: EdgeInsets.all(15),
+                        ),
+                      ),
+                    ],
                   ),
                   RawMaterialButton(
                     onPressed: () {
@@ -77,10 +86,9 @@ class PlaceTile extends StatelessWidget {
                     padding: EdgeInsets.all(15),
                   ),
                   RawMaterialButton(
-                    onPressed: (){
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context)=>FeedBackScreen())
-                      );
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => FeedBackScreen()));
                     },
                     child: Icon(Icons.feedback, size: 25, color: Colors.black),
                     shape: new CircleBorder(),
