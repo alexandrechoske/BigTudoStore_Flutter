@@ -43,6 +43,7 @@ class ProductScreen extends StatefulWidget {
   final String data;
   final references;
 
+
   @override
   _ProductScreenState createState() => _ProductScreenState();
 }
@@ -66,6 +67,30 @@ class _ProductScreenState extends State<ProductScreen> {
     });
   }
 
+
+
+  void cartAddNotify(){
+    _scaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text("Produto Adicionado com sucesso!"),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        )
+    );
+  }
+
+  void cartStockNotify(){
+    _scaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text("Que pena! Este produto não está disponível :("),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        )
+    );
+  }
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+
   @override
   Widget build(BuildContext context) {
     String userLogged = (UserModel.of(context).isLoggedIn())
@@ -83,6 +108,7 @@ class _ProductScreenState extends State<ProductScreen> {
         .collection(widget.ref.toString());
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Big Tudo Store'),
@@ -274,31 +300,43 @@ class _ProductScreenState extends State<ProductScreen> {
                       color: Colors.black),
                 ),
                 Opacity(
-                  opacity: (UserModel.of(context).isLoggedIn()) ||
-                          widget.estoque == "S"
+                  opacity: (UserModel.of(context).isLoggedIn())
                       ? 1.0
                       : 0.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       FlatButton.icon(
-                        color: Colors.blue,
+                        color: widget.estoque == "S"
+                      ? Colors.blue
+                        : Colors.red,
                         icon: Icon(
                           Icons.add_shopping_cart,
-                          color: Colors.white,
+                          color: Colors.white
+
                         ),
                         //`Icon` to display
                         label: Text(
-                          UserModel.of(context).isLoggedIn()
+                          (UserModel.of(context).isLoggedIn()) &&
+                              widget.estoque == "S"
                               ? "Adicionar ao Carrinho"
-                              : "Entre para Comprar",
-                          style: TextStyle(color: Colors.white),
+                              : "Produto Indisponível",
+                          style: TextStyle(
+                              color:Colors.white),
                         ),
 
                         //`Text` to display
                         onPressed: () {
-                          if (UserModel.of(context).isLoggedIn()) {
-                            fCheckCart();
+                          if  (
+                          UserModel.of(context).isLoggedIn() &&
+                              widget.estoque == "N")
+                          {
+                            cartStockNotify();
+                          }
+                          else if
+                          (UserModel.of(context).isLoggedIn())
+                          {
+                            cartAddNotify();
                             CartProduct cartProduct = CartProduct();
                             cartProduct.quantity = 1;
                             cartProduct.pid = widget.ref;
@@ -310,28 +348,13 @@ class _ProductScreenState extends State<ProductScreen> {
                             cartProduct.imag = widget.imag;
 
                             CartModel.of(context).addCartItem(cartProduct);
-                          } else {
+                          }
+                          else {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => LoginScreen()));
                           }
+
                         },
-                      ),
-                      Container(
-                        child: Opacity(
-                          opacity: checkItemCart ? 1.0 : 0.0,
-                          child: Text(checkItemCart ? 'Item Adicionado!' : ''),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 0),
-                        child: Opacity(
-                          opacity: checkItemCart ? 1.0 : 0.0,
-                          child: SizedBox(
-                            height: 60,
-                            width: 60,
-                            child: Image.asset('assets/gifs/checkmarkgif.gif'),
-                          ),
-                        ),
                       ),
                     ],
                   ),

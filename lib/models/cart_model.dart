@@ -103,6 +103,7 @@ class CartModel extends Model {
     DocumentReference refOrder = await Firestore.instance.collection("orders").add(
         {
           "clientId": user.firebaseUser.uid,
+          "clientEmail": user.firebaseUser.email,
           "products": products.map((cartProduct)=>cartProduct.toMap()).toList(),
           "shipPrice": shipPrice,
           "productsPrice": productsPrice,

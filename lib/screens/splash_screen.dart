@@ -33,36 +33,35 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   onDoneLoading() async {
-    try {
-      print(UserModel.of(context).firebaseUser.uid.toString());
-      String userLogged = UserModel.of(context).firebaseUser.uid;
-      String userEmail = UserModel.of(context).firebaseUser.email;
-      Firestore.instance
-          .collection("logs")
-          .document('horarios')
-          .collection(userLogged)
-          .document()
-          .setData({
-        "registro": DateTime.now(),
-        "LAT": _currentPosition.latitude.toString(),
-        "LNG": _currentPosition.longitude.toString(),
-        "usuario": userEmail,
-      });
-    } catch (e) {
-      String userLogged = 'no_user';
-      String userEmail = 'no_email';
-      Firestore.instance
-          .collection("logs")
-          .document('horarios')
-          .collection(userLogged)
-          .document('logs')
-          .setData({
-        "registro": DateTime.now(),
-        "LAT": _currentPosition.latitude.toString(),
-        "LNG": _currentPosition.longitude.toString(),
-        "usuario": userEmail
-      });
-    }
+//    try {
+//      String userLogged = UserModel.of(context).firebaseUser.uid;
+//      String userEmail = UserModel.of(context).firebaseUser.email;
+//      Firestore.instance
+//          .collection("logs")
+//          .document('horarios')
+//          .collection(userLogged)
+//          .document()
+//          .setData({
+//        "registro": DateTime.now(),
+//        "LAT": _currentPosition.latitude.toString(),
+//        "LNG": _currentPosition.longitude.toString(),
+//        "usuario": userEmail,
+//      });
+//    } catch (e) {
+//      String userLogged = 'no_user';
+//      String userEmail = 'no_email';
+//      Firestore.instance
+//          .collection("logs")
+//          .document('horarios')
+//          .collection(userLogged)
+//          .document('logs')
+//          .setData({
+//        "registro": DateTime.now(),
+//        "LAT": _currentPosition.latitude.toString(),
+//        "LNG": _currentPosition.longitude.toString(),
+//        "usuario": userEmail
+//      });
+//    }
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
   }

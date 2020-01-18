@@ -32,7 +32,7 @@ class _ProductList extends State<ProductList> {
         .orderBy('valorAte', descending: true)
         .snapshots();
 
-    Color filterColor = Colors.cyan;
+    Color filterColor = Colors.white30;
 
     return new Container(
       child: Scaffold(
@@ -54,18 +54,14 @@ class _ProductList extends State<ProductList> {
                       children: <Widget>[
                         Expanded(
                             child: Container(
-                                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder: 'assets/gifs/spinner2.gif',
-                                    image: snapshot['imag'] != null
-                                        ? snapshot['imag']
-                                        : '',
-                                  ),
-                                )
-                            )
-                        ),
+                          padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/gifs/spinner2.gif',
+                            image: snapshot['imag'] != null
+                                ? snapshot['imag']
+                                : '',
+                          ),
+                        )),
                         Container(
                           padding: EdgeInsets.fromLTRB(0, 1, 0, 0),
                           child: Row(
@@ -226,9 +222,8 @@ class _ProductList extends State<ProductList> {
                           )),
                       Container(
                           height: 65,
-                          color: isOuroSelected
-                              ? filterColor
-                              : Colors.transparent,
+                          color:
+                              isOuroSelected ? filterColor : Colors.transparent,
                           child: Column(
                             children: <Widget>[
                               IconButton(
